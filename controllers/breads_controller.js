@@ -2,6 +2,9 @@ const express = require('express')
 const breads = express.Router()
 const Bread = require('../models/bread.js')
 
+// DEPENDENCIES
+const methodOverride = require('method-override')
+
 // INDEX
 breads.get('/', (req, res) => {
     res.render('Index',
@@ -29,11 +32,18 @@ breads.get('/new', (req, res) => {
   res.render('new')
 })
 
+//Delete
+breads.delete('/:indexArray', (req, res) => {
+  Bread.slice(req.params.indexArray, 1)
+  res.status(303).redirect('/breads')
+})
+
 // SHOW
 breads.get('/:arrayIndex', (req, res) => {
   if (Bread[req.params.arrayIndex]) {
     res.render('Show', {
-      bread:Bread[req.params.arrayIndex]
+      bread:Bread[req.params.arrayIndex],
+      index: req.params.arrayIndex,
     })
   } else {
     res.render('404')
